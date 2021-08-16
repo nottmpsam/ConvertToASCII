@@ -24,7 +24,8 @@ int convert::editHeight()
 {
     return img.height() / coef * width/ img.width();
 }
-void convert::asciiFirst()
+
+void convert::asciiOut(const char* _asciiOut, int size)
 {
     QTextStream output(&out);
     int _gray, _index;
@@ -35,36 +36,21 @@ void convert::asciiFirst()
             QColor color(img.pixel(j, i));
             _gray = (color.red() + color.green() + color.blue()) / 3;
             img.setPixel(j,i, qRgb(_gray, _gray, _gray));
-            _index = index(_gray, 0, 255, 0, asciiLength - 1);
-            output << asciiTable[_index];
+            _index = index(_gray, 0, 255, 0, size - 1);
+            output << _asciiOut[_index];
         }
       output << '\n';
     }
 }
-void convert::asciiSecond()
-{
-    QTextStream output(&out);
-    int _gray, _index;
-    for (int i = 0; i < img.height(); ++i)
-    {
-        for (int j = 0; j < img.width(); ++j)
-        {
-            QColor color(img.pixel(j, i));
-            _gray = (color.red() + color.green() + color.blue()) / 3;
-            img.setPixel(j,i, qRgb(_gray, _gray, _gray));
-            _index = index(_gray, 0, 255, 0, asciiLength0 - 1);
-            output << asciiTable0[_index];
-        }
-      output << '\n';
-    }
-}
+
 bool convert::startConvert(int choice)
 {
    if (!img.isNull() && out.isOpen()) {
        const int _height = editHeight();
 
        img = img.scaled(width, _height, Qt::KeepAspectRatio);
-       choice > 0 ? asciiFirst() : asciiSecond();
+       choice > 0 ? asciiOut(asciiTable, asciiLength)
+                  : asciiOut(asciiTable0, asciiLength0);
        out.close();
        return true;
    }

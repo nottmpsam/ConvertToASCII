@@ -27,8 +27,7 @@ class convert
         '-', '+', '~', '!', ';',
         ':', ',', '.'
     };
-    void asciiFirst();
-    void asciiSecond();
+    void asciiOut(const char*, int);
     int editHeight();
 public:
     convert() = default;
